@@ -1,0 +1,2 @@
+# Description
+DevPeek is a GitHub user search application built with modern Android development practices. The app integrates with the GitHub REST API to search users, display paginated results, and show detailed profile information. It follows Clean Architecture principles with a clear separation between Presentation, Domain, and Data layers, utilizes Kotlin Coroutines for asynchronous operations, and persists data locally using Room for caching and offline support.
