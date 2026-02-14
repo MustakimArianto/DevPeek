@@ -1,6 +1,5 @@
 package com.mustakimarianto.devpeek.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,34 +8,66 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
+// ─── Color Schemes ────────────────────────────────────────────────────────────
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary          = Purple40,
+    onPrimary        = Neutral99,
+    primaryContainer = Purple90,
+    onPrimaryContainer = Purple10,
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary        = PurpleDark40,
+    onSecondary      = Neutral99,
+    secondaryContainer = Purple90,
+    onSecondaryContainer = Purple10,
+
+    tertiary         = TertiaryLight,
+    onTertiary       = Neutral99,
+    tertiaryContainer = Color(0xFFFFD8E4),
+    onTertiaryContainer = Color(0xFF31111D),
+
+    background       = SurfaceLight,
+    onBackground     = Neutral10,
+    surface          = SurfaceLight,
+    onSurface        = Neutral10,
+    surfaceVariant   = Neutral95,
+    onSurfaceVariant = Neutral20,
+
+    outline          = NavInactiveLight,
 )
 
+private val DarkColorScheme = darkColorScheme(
+    primary          = Purple80,
+    onPrimary        = Purple20,
+    primaryContainer = Purple30,
+    onPrimaryContainer = Purple90,
+
+    secondary        = PurpleDark80,
+    onSecondary      = PurpleDark10,
+    secondaryContainer = Purple20,
+    onSecondaryContainer = Purple90,
+
+    tertiary         = TertiaryLight,
+    onTertiary       = TertiaryDark,
+    tertiaryContainer = TertiaryDark,
+    onTertiaryContainer = Color(0xFFFFD8E4),
+
+    background       = SurfaceDark,
+    onBackground     = Neutral90,
+    surface          = SurfaceDark,
+    onSurface        = Neutral90,
+    surfaceVariant   = Neutral20,
+    onSurfaceVariant = Neutral90,
+
+    outline          = NavInactiveDark,
+)
+
+// ─── Theme ────────────────────────────────────────────────────────────────────
 @Composable
 fun DevPeekTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -45,7 +76,6 @@ fun DevPeekTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
