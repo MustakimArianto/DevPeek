@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mustakimarianto.devpeek.feature_menu.navigation.BottomNavItem
+import com.mustakimarianto.devpeek.feature_search.navigation.searchNavigation
 import com.mustakimarianto.devpeek.navigation.AppRoute
 
 @Composable
@@ -51,9 +52,8 @@ fun MenuScreen() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            composable<AppRoute.Search> {
-                // SearchScreen()
-            }
+            searchNavigation(bottomNavController)
+
             composable<AppRoute.Saved> {
                 // SavedScreen()
             }

@@ -11,6 +11,6 @@ fun AppNavHost(navHostController: NavHostController) {
         navController = navHostController,
         startDestination = AppRoute.Main
     ) {
-        menuNavigation(navController = navHostController)
+        menuNavigation()
     }
 }
