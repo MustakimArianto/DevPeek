@@ -1,9 +1,9 @@
 package com.mustakimarianto.devpeek.feature_search.domain
 
 import androidx.paging.PagingData
+import com.mustakimarianto.devpeek.core.domain.model.GithubUserDetail
+import com.mustakimarianto.devpeek.core.domain.model.RepositoryModel
 import com.mustakimarianto.devpeek.feature_search.domain.model.GithubUser
-import com.mustakimarianto.devpeek.feature_search.domain.model.GithubUserDetail
-import com.mustakimarianto.devpeek.feature_search.domain.model.Repository
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
@@ -32,11 +32,11 @@ interface SearchRepository {
      * Get a user's public repositories
      *
      * @param username GitHub username
-     * @param limit Maximum number of repositories to return (default = 100)
+     * @param limit Maximum number of repositories to return
      * @return List of Repository objects sorted by stars
      * @throws Exception if error occurs
      */
-    suspend fun getUserRepositories(username: String, limit: Int = 100): List<Repository>
+    suspend fun getUserRepositories(username: String, limit: Int = 100): List<RepositoryModel>
 
     /**
      * Check if a user is saved locally

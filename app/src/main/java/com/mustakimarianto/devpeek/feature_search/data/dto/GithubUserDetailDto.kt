@@ -1,6 +1,6 @@
 package com.mustakimarianto.devpeek.feature_search.data.dto
 
-import com.mustakimarianto.devpeek.feature_search.domain.model.GithubUserDetail
+import com.mustakimarianto.devpeek.core.domain.model.GithubUserDetail
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

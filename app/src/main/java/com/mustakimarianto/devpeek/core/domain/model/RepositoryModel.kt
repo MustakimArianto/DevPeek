@@ -1,9 +1,9 @@
-package com.mustakimarianto.devpeek.feature_search.domain.model
+package com.mustakimarianto.devpeek.core.domain.model
 
 import androidx.annotation.Keep
 
 @Keep
-data class Repository(
+data class RepositoryModel(
     val id: Int,
     val name: String,
     val fullName: String,

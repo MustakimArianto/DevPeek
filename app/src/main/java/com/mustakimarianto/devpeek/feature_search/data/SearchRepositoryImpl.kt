@@ -6,16 +6,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.mustakimarianto.devpeek.core.data.local.AppDatabase
+import com.mustakimarianto.devpeek.core.data.local.dao.SavedUserDao
+import com.mustakimarianto.devpeek.core.data.local.entity.SavedUserEntity
 import com.mustakimarianto.devpeek.core.data.remote.GithubApi
+import com.mustakimarianto.devpeek.core.domain.model.GithubUserDetail
+import com.mustakimarianto.devpeek.core.domain.model.RepositoryModel
 import com.mustakimarianto.devpeek.feature_search.data.local.dao.GithubUserDao
 import com.mustakimarianto.devpeek.feature_search.data.local.dao.RemoteKeysDao
-import com.mustakimarianto.devpeek.feature_search.data.local.dao.SavedUserDao
-import com.mustakimarianto.devpeek.feature_search.data.local.entity.SavedUserEntity
 import com.mustakimarianto.devpeek.feature_search.data.paging.GithubUserRemoteMediator
 import com.mustakimarianto.devpeek.feature_search.domain.SearchRepository
 import com.mustakimarianto.devpeek.feature_search.domain.model.GithubUser
-import com.mustakimarianto.devpeek.feature_search.domain.model.GithubUserDetail
-import com.mustakimarianto.devpeek.feature_search.domain.model.Repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -64,7 +64,7 @@ class SearchRepositoryImpl @Inject constructor(
         return response.toDomain()
     }
 
-    override suspend fun getUserRepositories(username: String, limit: Int): List<Repository> {
+    override suspend fun getUserRepositories(username: String, limit: Int): List<RepositoryModel> {
         val response = api.getUserRepositories(
             username = username,
             perPage = limit,

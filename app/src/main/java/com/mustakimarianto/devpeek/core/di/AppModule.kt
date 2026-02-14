@@ -6,6 +6,7 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.mustakimarianto.devpeek.BuildConfig
 import com.mustakimarianto.devpeek.core.data.local.AppDatabase
 import com.mustakimarianto.devpeek.core.data.local.PreferencesManager
+import com.mustakimarianto.devpeek.core.data.local.dao.SavedUserDao
 import com.mustakimarianto.devpeek.core.data.remote.GitHubHeadersInterceptor
 import com.mustakimarianto.devpeek.core.data.remote.GithubApi
 import com.squareup.moshi.Moshi
@@ -40,29 +41,62 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttp(): OkHttpClient {
-        val timeoutInSeconds = 3L
-        val logging = HttpLoggingInterceptor()
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-        return OkHttpClient().newBuilder().addInterceptor(logging)
-            .connectTimeout(timeoutInSeconds, TimeUnit.SECONDS)
-            .readTimeout(timeoutInSeconds, TimeUnit.SECONDS)
-            .writeTimeout(timeoutInSeconds, TimeUnit.SECONDS).build()
+    fun provideSavedUserDao(
+        database: AppDatabase
+    ): SavedUserDao {
+        return database.savedUserDao()
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(@ApplicationContext context: Context): Retrofit {
-        val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
 
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+    @Provides
+    @Singleton
+    fun provideHeadersInterceptor(): GitHubHeadersInterceptor {
+        return GitHubHeadersInterceptor(BuildConfig.GITHUB_TOKEN)
+    }
 
-        val okHttpClient = OkHttpClient.Builder().addInterceptor(ChuckerInterceptor(context))
-            .addInterceptor(GitHubHeadersInterceptor(BuildConfig.GITHUB_TOKEN)).build()
+    @Provides
+    @Singleton
+    fun provideChucker(@ApplicationContext context: Context) =
+        ChuckerInterceptor(context)
 
-        return Retrofit.Builder().baseUrl("https://api.github.com/").client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create(moshi)).build()
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        logging: HttpLoggingInterceptor,
+        headers: GitHubHeadersInterceptor,
+        chucker: ChuckerInterceptor
+    ): OkHttpClient {
+
+        return OkHttpClient.Builder()
+            .addInterceptor(headers)
+            .addInterceptor(logging)
+            .addInterceptor(chucker)
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(3, TimeUnit.SECONDS)
+            .writeTimeout(3, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+
+        val moshi = Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl("https://api.github.com/")
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
     }
 
     @Provides

@@ -9,8 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.mustakimarianto.devpeek.core.ui_component.UserDetailScreen
 import com.mustakimarianto.devpeek.core.ui_component.sharedViewModel
-import com.mustakimarianto.devpeek.feature_search.presentation.DetailScreen
 import com.mustakimarianto.devpeek.feature_search.presentation.DiscoverScreen
 import com.mustakimarianto.devpeek.feature_search.presentation.SearchViewModel
 import com.mustakimarianto.devpeek.navigation.AppRoute
@@ -48,7 +48,7 @@ fun NavGraphBuilder.searchNavigation(navController: NavController) {
                 viewModel.loadUserDetail(route.username)
             }
 
-            DetailScreen(
+            UserDetailScreen(
                 detailState = uiState.detailState,
                 onBackClick = {
                     viewModel.clearDetailState()

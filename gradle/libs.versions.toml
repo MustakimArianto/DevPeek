@@ -24,7 +24,7 @@ coilCompose = "3.0.4"
 
 paging = "3.4.1"
 
-chucker = "4.3.0"
+chucker = "3.5.2"
 
 serialization = "2.3.0"
 

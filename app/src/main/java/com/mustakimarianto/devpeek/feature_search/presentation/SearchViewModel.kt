@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.mustakimarianto.devpeek.core.data.local.PreferencesManager
+import com.mustakimarianto.devpeek.feature_saved.domain.SavedRepository
 import com.mustakimarianto.devpeek.feature_search.domain.DetailState
 import com.mustakimarianto.devpeek.feature_search.domain.SearchRepository
 import com.mustakimarianto.devpeek.feature_search.domain.model.UserType
@@ -26,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: SearchRepository,
+    private val savedRepository: SavedRepository,
     private val preferencesManager: PreferencesManager,
 ) : ViewModel() {
 
@@ -135,9 +137,12 @@ class SearchViewModel @Inject constructor(
             if (currentState is DetailState.Success) {
                 try {
                     if (currentState.isSaved) {
-                        repository.unsaveUser(currentState.user.id)
+                        savedRepository.deleteSavedUser(currentState.user.id)
                     } else {
-                        repository.saveUser(currentState.user)
+                        savedRepository.saveUserWithRepositories(
+                            user = currentState.user,
+                            repositories = currentState.topRepos
+                        )
                     }
 
                     _uiState.update {

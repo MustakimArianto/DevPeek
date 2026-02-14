@@ -1,8 +1,8 @@
-package com.mustakimarianto.devpeek.feature_search.data.local.entity
+package com.mustakimarianto.devpeek.core.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mustakimarianto.devpeek.feature_search.domain.model.GithubUserDetail
+import com.mustakimarianto.devpeek.core.domain.model.GithubUserDetail
 
 @Entity(tableName = "saved_users")
 data class SavedUserEntity(

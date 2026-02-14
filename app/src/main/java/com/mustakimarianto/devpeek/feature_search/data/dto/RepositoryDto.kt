@@ -1,6 +1,6 @@
 package com.mustakimarianto.devpeek.feature_search.data.dto
 
-import com.mustakimarianto.devpeek.feature_search.domain.model.Repository
+import com.mustakimarianto.devpeek.core.domain.model.RepositoryModel
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -33,8 +33,8 @@ data class RepositoryDto(
     @param:Json(name = "updated_at")
     val updatedAt: String,
 ) {
-    fun toDomain(): Repository {
-        return Repository(
+    fun toDomain(): RepositoryModel {
+        return RepositoryModel(
             id = id,
             name = name,
             fullName = fullName,

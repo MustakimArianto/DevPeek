@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
+import com.mustakimarianto.devpeek.core.ui_component.RequestNotificationPermission
 import com.mustakimarianto.devpeek.navigation.AppNavHost
 import com.mustakimarianto.devpeek.ui.theme.DevPeekTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
             DevPeekTheme {
                 val navController = rememberNavController()
 
+                RequestNotificationPermission()
                 AppNavHost(navController)
             }
         }

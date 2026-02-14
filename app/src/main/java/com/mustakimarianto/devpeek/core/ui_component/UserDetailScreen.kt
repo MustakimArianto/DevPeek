@@ -1,4 +1,4 @@
-package com.mustakimarianto.devpeek.feature_search.presentation
+package com.mustakimarianto.devpeek.core.ui_component
 
 import android.content.Intent
 import android.net.Uri
@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -48,12 +49,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.mustakimarianto.devpeek.core.domain.model.GithubUserDetail
+import com.mustakimarianto.devpeek.core.domain.model.RepositoryModel
 import com.mustakimarianto.devpeek.feature_search.domain.DetailState
-import com.mustakimarianto.devpeek.feature_search.domain.model.GithubUserDetail
-import com.mustakimarianto.devpeek.feature_search.domain.model.Repository
 
 @Composable
-fun DetailScreen(
+fun UserDetailScreen(
     detailState: DetailState,
     onBackClick: () -> Unit,
     onSaveToggle: () -> Unit,
@@ -124,7 +125,7 @@ fun DetailScreen(
 @Composable
 private fun DetailContent(
     user: GithubUserDetail,
-    topRepos: List<Repository>,
+    topRepos: List<RepositoryModel>,
     isSaved: Boolean,
     onBackClick: () -> Unit,
     onSaveToggle: () -> Unit,
@@ -229,7 +230,7 @@ private fun DetailContent(
             // Show top repositories
             items(topRepos) { repo ->
                 RepositoryCard(
-                    repository = repo,
+                    repositoryModel = repo,
                     onClick = { onRepoClick(repo.htmlUrl) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -397,7 +398,7 @@ private fun StatsSection(
 private fun StatCard(
     value: String,
     label: String,
-    color: androidx.compose.ui.graphics.Color,
+    color: Color,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -476,7 +477,7 @@ private fun ActionButtons(
 
 @Composable
 private fun RepositoryCard(
-    repository: Repository,
+    repositoryModel: RepositoryModel,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -494,7 +495,7 @@ private fun RepositoryCard(
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             Text(
-                text = repository.name,
+                text = repositoryModel.name,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -502,9 +503,9 @@ private fun RepositoryCard(
                 overflow = TextOverflow.Ellipsis,
             )
 
-            if (repository.description != null) {
+            if (repositoryModel.description != null) {
                 Text(
-                    text = repository.description,
+                    text = repositoryModel.description,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     lineHeight = 15.sp,
@@ -517,7 +518,7 @@ private fun RepositoryCard(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (repository.language != null) {
+                if (repositoryModel.language != null) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(3.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -526,10 +527,10 @@ private fun RepositoryCard(
                             modifier = Modifier
                                 .size(8.dp)
                                 .clip(CircleShape)
-                                .background(getLanguageColor(repository.language))
+                                .background(getLanguageColor(repositoryModel.language))
                         )
                         Text(
-                            text = repository.language,
+                            text = repositoryModel.language,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -537,13 +538,13 @@ private fun RepositoryCard(
                 }
 
                 Text(
-                    text = "⭐ ${repository.stargazersCount.formatNumber()}",
+                    text = "⭐ ${repositoryModel.stargazersCount.formatNumber()}",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
                 Text(
-                    text = "🍴 ${repository.forksCount.formatNumber()}",
+                    text = "🍴 ${repositoryModel.forksCount.formatNumber()}",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -610,22 +611,22 @@ private fun Int.formatNumber(): String {
 
 // Helper function to get language color (simplified version)
 @Composable
-private fun getLanguageColor(language: String): androidx.compose.ui.graphics.Color {
+private fun getLanguageColor(language: String): Color {
     return when (language.lowercase()) {
-        "kotlin" -> androidx.compose.ui.graphics.Color(0xFFA97BFF)
-        "java" -> androidx.compose.ui.graphics.Color(0xFFB07219)
-        "javascript" -> androidx.compose.ui.graphics.Color(0xFFF1E05A)
-        "typescript" -> androidx.compose.ui.graphics.Color(0xFF3178C6)
-        "python" -> androidx.compose.ui.graphics.Color(0xFF3572A5)
-        "swift" -> androidx.compose.ui.graphics.Color(0xFFF05138)
-        "go" -> androidx.compose.ui.graphics.Color(0xFF00ADD8)
-        "rust" -> androidx.compose.ui.graphics.Color(0xFFDEA584)
-        "dart" -> androidx.compose.ui.graphics.Color(0xFF00B4AB)
-        "c" -> androidx.compose.ui.graphics.Color(0xFF555555)
-        "c++" -> androidx.compose.ui.graphics.Color(0xFFF34B7D)
-        "c#" -> androidx.compose.ui.graphics.Color(0xFF178600)
-        "ruby" -> androidx.compose.ui.graphics.Color(0xFF701516)
-        "php" -> androidx.compose.ui.graphics.Color(0xFF4F5D95)
+        "kotlin" -> Color(0xFFA97BFF)
+        "java" -> Color(0xFFB07219)
+        "javascript" -> Color(0xFFF1E05A)
+        "typescript" -> Color(0xFF3178C6)
+        "python" -> Color(0xFF3572A5)
+        "swift" -> Color(0xFFF05138)
+        "go" -> Color(0xFF00ADD8)
+        "rust" -> Color(0xFFDEA584)
+        "dart" -> Color(0xFF00B4AB)
+        "c" -> Color(0xFF555555)
+        "c++" -> Color(0xFFF34B7D)
+        "c#" -> Color(0xFF178600)
+        "ruby" -> Color(0xFF701516)
+        "php" -> Color(0xFF4F5D95)
         else -> MaterialTheme.colorScheme.primary
     }
 }

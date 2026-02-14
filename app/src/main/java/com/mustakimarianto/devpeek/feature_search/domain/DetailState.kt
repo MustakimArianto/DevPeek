@@ -1,7 +1,7 @@
 package com.mustakimarianto.devpeek.feature_search.domain
 
-import com.mustakimarianto.devpeek.feature_search.domain.model.GithubUserDetail
-import com.mustakimarianto.devpeek.feature_search.domain.model.Repository
+import com.mustakimarianto.devpeek.core.domain.model.GithubUserDetail
+import com.mustakimarianto.devpeek.core.domain.model.RepositoryModel
 
 sealed interface DetailState {
     data object Idle : DetailState
@@ -9,7 +9,7 @@ sealed interface DetailState {
 
     data class Success(
         val user: GithubUserDetail,
-        val topRepos: List<Repository>,
+        val topRepos: List<RepositoryModel>,
         val isSaved: Boolean,
     ) : DetailState
 
