@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.mustakimarianto.devpeek.core.data.local.PreferencesManager
+import com.mustakimarianto.devpeek.feature_search.domain.DetailState
 import com.mustakimarianto.devpeek.feature_search.domain.SearchRepository
 import com.mustakimarianto.devpeek.feature_search.domain.model.UserType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -96,5 +97,62 @@ class SearchViewModel @Inject constructor(
 
     fun onClearRecentSearches() {
         preferencesManager.clearRecentSearches()
+    }
+
+    fun loadUserDetail(username: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(detailState = DetailState.Loading) }
+
+            try {
+                val userDetail = repository.getUserDetail(username)
+                val topRepos = repository.getUserRepositories(username, limit = 3)
+                val isSaved = repository.isUserSaved(userDetail.id)
+
+                _uiState.update {
+                    it.copy(
+                        detailState = DetailState.Success(
+                            user = userDetail,
+                            topRepos = topRepos,
+                            isSaved = isSaved,
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        detailState = DetailState.Error(
+                            message = e.message ?: "Unknown error occurred"
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun toggleSave() {
+        viewModelScope.launch {
+            val currentState = _uiState.value.detailState
+            if (currentState is DetailState.Success) {
+                try {
+                    if (currentState.isSaved) {
+                        repository.unsaveUser(currentState.user.id)
+                    } else {
+                        repository.saveUser(currentState.user)
+                    }
+
+                    _uiState.update {
+                        it.copy(
+                            detailState = currentState.copy(isSaved = !currentState.isSaved)
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    fun clearDetailState() {
+        _uiState.update { it.copy(detailState = DetailState.Idle) }
     }
 }

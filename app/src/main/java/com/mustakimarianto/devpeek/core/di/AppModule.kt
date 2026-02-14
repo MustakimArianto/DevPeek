@@ -8,8 +8,6 @@ import com.mustakimarianto.devpeek.core.data.local.AppDatabase
 import com.mustakimarianto.devpeek.core.data.local.PreferencesManager
 import com.mustakimarianto.devpeek.core.data.remote.GitHubHeadersInterceptor
 import com.mustakimarianto.devpeek.core.data.remote.GithubApi
-import com.mustakimarianto.devpeek.feature_search.data.local.dao.GithubUserDao
-import com.mustakimarianto.devpeek.feature_search.data.local.dao.RemoteKeysDao
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -38,22 +36,6 @@ object AppModule {
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(context, AppDatabase::class.java, "app_database").build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideGithubUserDao(
-        database: AppDatabase
-    ): GithubUserDao {
-        return database.githubUserDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRemoteKeysDao(
-        database: AppDatabase
-    ): RemoteKeysDao {
-        return database.remoteKeysDao()
     }
 
     @Provides

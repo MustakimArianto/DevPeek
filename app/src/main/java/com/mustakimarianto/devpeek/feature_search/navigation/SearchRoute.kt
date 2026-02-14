@@ -7,5 +7,5 @@ interface SearchRoute {
     data object Discover : SearchRoute
 
     @Serializable
-    data object Detail : SearchRoute
+    data class Detail(val username: String) : SearchRoute
 }

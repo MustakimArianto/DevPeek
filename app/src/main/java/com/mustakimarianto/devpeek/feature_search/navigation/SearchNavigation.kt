@@ -1,11 +1,13 @@
 package com.mustakimarianto.devpeek.feature_search.navigation
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.mustakimarianto.devpeek.core.ui_component.sharedViewModel
 import com.mustakimarianto.devpeek.feature_search.presentation.DetailScreen
@@ -31,14 +33,30 @@ fun NavGraphBuilder.searchNavigation(navController: NavController) {
                 onFilterChange = viewModel::onFilterChange,
                 onRecentSearchClick = viewModel::onRecentSearchClick,
                 onClearRecentSearches = viewModel::onClearRecentSearches,
-                onUserClick = {
-
+                onUserClick = { user ->
+                    navController.navigate(SearchRoute.Detail(username = user.login))
                 }
             )
         }
 
         composable<SearchRoute.Detail> {
-            DetailScreen()
+            val viewModel = it.sharedViewModel<SearchViewModel>(navController)
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val route = it.toRoute<SearchRoute.Detail>()
+
+            LaunchedEffect(route.username) {
+                viewModel.loadUserDetail(route.username)
+            }
+
+            DetailScreen(
+                detailState = uiState.detailState,
+                onBackClick = {
+                    viewModel.clearDetailState()
+                    navController.navigateUp()
+                },
+                onSaveToggle = viewModel::toggleSave,
+                onRetry = { viewModel.loadUserDetail(route.username) },
+            )
         }
     }
 }
