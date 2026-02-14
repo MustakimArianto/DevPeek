@@ -15,6 +15,7 @@ class PreferencesManager @Inject constructor(
     companion object {
         private const val PREFS_NAME = "app_preferences"
         private const val KEY_RECENT_SEARCHES = "recent_searches"
+        private const val KEY_DARK_MODE = "dark_mode"
         private const val MAX_RECENT_SEARCHES = 5
         private const val DELIMITER = "|||"
     }
@@ -22,8 +23,13 @@ class PreferencesManager @Inject constructor(
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
+    // Recent searches
     private val _recentSearches = MutableStateFlow(loadRecentSearches())
     val recentSearches: StateFlow<List<String>> = _recentSearches.asStateFlow()
+
+    // Dark mode
+    private val _isDarkMode = MutableStateFlow(loadDarkModePreference())
+    val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
 
     private fun loadRecentSearches(): List<String> {
         val savedString = sharedPreferences.getString(KEY_RECENT_SEARCHES, "") ?: ""
@@ -58,5 +64,18 @@ class PreferencesManager @Inject constructor(
             .remove(KEY_RECENT_SEARCHES)
             .apply()
         _recentSearches.value = emptyList()
+    }
+
+    // Dark mode functions
+    private fun loadDarkModePreference(): Boolean {
+        // Default to true (dark mode enabled by default)
+        return sharedPreferences.getBoolean(KEY_DARK_MODE, true)
+    }
+
+    fun setDarkMode(enabled: Boolean) {
+        sharedPreferences.edit()
+            .putBoolean(KEY_DARK_MODE, enabled)
+            .apply()
+        _isDarkMode.value = enabled
     }
 }

@@ -160,4 +160,9 @@ class SearchViewModel @Inject constructor(
     fun clearDetailState() {
         _uiState.update { it.copy(detailState = DetailState.Idle) }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        clearDetailState()
+    }
 }

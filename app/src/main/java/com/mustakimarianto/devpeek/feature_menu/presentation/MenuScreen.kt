@@ -19,12 +19,12 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mustakimarianto.devpeek.feature_menu.navigation.BottomNavItem
 import com.mustakimarianto.devpeek.feature_saved.navigation.savedNavigation
 import com.mustakimarianto.devpeek.feature_search.navigation.searchNavigation
+import com.mustakimarianto.devpeek.feature_settings.navigation.settingsNavigation
 import com.mustakimarianto.devpeek.navigation.AppRoute
 
 @Composable
@@ -55,9 +55,7 @@ fun MenuScreen() {
         ) {
             searchNavigation(bottomNavController)
             savedNavigation(bottomNavController)
-            composable<AppRoute.Settings> {
-                // SettingsScreen()
-            }
+            settingsNavigation(bottomNavController)
         }
     }
 }
